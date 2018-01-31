@@ -1,6 +1,6 @@
 {
   "name": "mofron-ssrender",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "server side rendering for mofron",
   "main": "index.js",
   "scripts": {

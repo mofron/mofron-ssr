@@ -3,6 +3,7 @@
  */
 require('expose-loader?window!./src/window.js');
 let mf = require('mofron');
+mf.ssr = true;
 
 module.exports = class extends mf.Base {
     constructor (po) {
@@ -43,6 +44,9 @@ module.exports = class extends mf.Base {
             if (null === this.component()) {
                 throw new Error('could not find component.');
             }
+            
+            this.component().initConfig(0); // layout
+            this.component().initConfig(1);
             
             console.log('<!DOCTYPE html>');
             console.log('<html>');
