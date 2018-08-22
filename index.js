@@ -2,15 +2,17 @@
  * @file mofron-ssrender/index.js
  */
 require('expose-loader?window!./src/window.js');
-let mf = require('mofron');
+require('expose-loader?navigator!./src/navigator.js');
+require('expose-loader?document!./src/document.js');
+const mf = require('mofron');
 
 module.exports = class extends mf.Base {
     constructor (po) {
         try {
             super();
             this.name('SsRender');
-            
             this.prmOpt(po);
+            
             mf.ssr = this;
         } catch (e) {
             console.error(e.stack);
@@ -49,9 +51,36 @@ module.exports = class extends mf.Base {
             this.component().initConfig(1);
             
             console.log('<!DOCTYPE html>');
-            console.log('<html>');
+            
+            let html = '<html';
+            if (0 !== document.documentElement.attr.length) {
+                for (let didx in document.documentElement.attr) {
+                    html += ' ' + didx + '=';
+                    if ('string' === typeof document.documentElement.attr[didx]) {
+                        html += document.documentElement.attr[didx];
+                    } else {
+                        throw new Error('not supported type:' + typeof document.documentElement.attr[didx]);
+                    }
+                }
+            }
+            html += '>';
+            console.log(html);
+            
             console.log(this.head());
-            console.log('<body style="margin:0px;padding:0px;">');
+            
+            let body = '<body';
+            if (0 !== document.body.attr.length) {
+                for (let didx in document.body.attr) {
+                    body += ' ' + didx + '=';
+                    if ('string' === typeof document.body.attr[didx]) {
+                        body += document.body.attr[didx];
+                    } else {
+                        throw new Error('not supported type:' + typeof document.body.attr[didx]);
+                    }
+                }
+            }
+            body += '>';
+            console.log(body);
             
             console.log(this.component().target().value());
             
